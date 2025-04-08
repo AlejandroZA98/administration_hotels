@@ -24,6 +24,7 @@ class RegisterUser(APIView):
             data['token']= {
                    'refresh': str(refresh),
                    'access': str(refresh.access_token),
+                   'id': account.id,
                    }
             return Response(data)
         
