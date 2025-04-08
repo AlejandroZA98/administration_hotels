@@ -7,11 +7,11 @@ class HotelSerializer(serializers.ModelSerializer):
     room_details = serializers.SerializerMethodField()
     administrador=serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(),many=False)
     administrador_name = serializers.StringRelatedField(source='administrador', read_only=True)
-
+    url=serializers.HyperlinkedIdentityField(view_name='hotel_detail')
     class Meta:
         model = Hotel
         fields = ['id', 'name', 'address', 'email', 'phone', 'administrador',
-                  'created_at', 'updated_at', 'room_details','administrador_name']
+                  'created_at', 'updated_at', 'room_details','administrador_name','url']
 
     def get_room_details(self, obj):
         return obj.get_room_details()
