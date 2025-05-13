@@ -23,14 +23,12 @@ class ReservationSerializer(serializers.ModelSerializer):
         check_in = data.get('check_in_date')
         check_out = data.get('check_out_date')
 
-        # Si estás haciendo PATCH y falta uno, toma el valor del instance (reservación original)
         if self.instance:
             if check_in is None:
                 check_in = self.instance.check_in_date
             if check_out is None:
                 check_out = self.instance.check_out_date
 
-        # Validar solo si ambos están definidos
         if check_in and check_out and check_in >= check_out:
             raise serializers.ValidationError("La fecha de check-out debe ser posterior a la fecha de check-in.")
 
