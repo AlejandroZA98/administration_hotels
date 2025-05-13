@@ -1,0 +1,14 @@
+<svg width="180" height="180" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <rect width="200" height="200" rx="20" fill="#1E3A8A"></rect>
+  <path d="M60 140V80H140V140" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M80 140V110H120V140" stroke="#60A5FA" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M60 80L100 50L140 80" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+  <text x="100" y="170" text-anchor="middle" fill="#E0F2FE" font-size="16" font-family="sans-serif" letter-spacing="2">
+    HOTELIA
+  </text>
+  <g fill="#FACC15">
+    <polygon points="100,30 104,42 117,43 107,52 110,65 100,58 90,65 93,52 83,43 96,42"></polygon>
+    <circle cx="70" cy="35" r="4"></circle>
+    <circle cx="130" cy="35" r="4"></circle>
+  </g>
+</svg>
