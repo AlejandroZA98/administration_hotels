@@ -8,7 +8,7 @@ class CreateRoomView(APIView):
     def post (self, request):
         data=request.data
         print(data)
-        serializer= RoomSerializer(data=request.data)
+        serializer= RoomSerializer(data=request.data,context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)

@@ -27,10 +27,10 @@ class Hotel(models.Model):
         return self.name
 
     def count_rooms(self):
-        return self.room_set.count()  # Método para contar habitaciones
+        return self.rooms.count()  # Método para contar habitaciones rooms es la relación inversa a Hotel
 
     def get_room_details(self):
-        room_details = self.rooms.values('room_type').annotate(room_count=Count('id'))
+        room_details = self.rooms.values('room_type').annotate(room_count=Count('id')) # rooms es la relación inversa a Hotel
         details = {
             "suites": 0,
             "single_rooms": 0,
