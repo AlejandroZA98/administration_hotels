@@ -8,7 +8,7 @@ class CreateHotelView(APIView):
     def post (self, request):
         data=request.data
         hotel_name=data['name']
-        serializer = HotelSerializer(data=request.data)
+        serializer = HotelSerializer(data=request.data, context={'request': request})
         if serializer.is_valid() and hotel_name is not Hotel.objects.all():
             serializer.save()
             return Response(serializer.data, status=201)
