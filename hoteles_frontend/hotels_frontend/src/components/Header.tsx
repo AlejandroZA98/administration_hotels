@@ -2,7 +2,7 @@ import { NavLink,useLocation } from "react-router-dom"
 
 export default function Header() {
   return (
-        <header className='bg-[url("/morelia.jpg")] bg-center bg-cover bg-no-repeat  '>
+        <header className='bg-[url("/morelia.jpg")] bg-center bg-cover bg-no-repeat h-90  '>
             <div className="mx-auto container px-5 py-10">
                 <div className="flex justify-between items-center">
 
