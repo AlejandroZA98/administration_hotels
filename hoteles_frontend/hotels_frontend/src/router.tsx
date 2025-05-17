@@ -4,9 +4,8 @@ import Layout from './layouts/Layout'
 import {lazy,Suspense} from 'react'
 
 const IndexPage = lazy(()=> import ('./views/IndexPage'))
-
 const HotelsPage = lazy(()=> import ('./views/hotels'))
- 
+const HotelDetailPage = lazy(()=> import ('./views/hotel_detail')) 
 export default function AppRouter() {
     return (
         <BrowserRouter>
@@ -22,6 +21,11 @@ export default function AppRouter() {
                         <Suspense fallback="Loading...">
                             <HotelsPage/>
                         </Suspense>}/>
+                    <Route path="/hotel/:id" element={
+                        <Suspense fallback="Loading...">
+                            <HotelDetailPage/>
+                        </Suspense>}/>
+
                 </Route>
             </Routes>
         </BrowserRouter>

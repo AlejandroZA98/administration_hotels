@@ -9,12 +9,12 @@ export default function hotels() {
   useEffect(() => {
       fetchHotels();
   },[])
-  console.log("hoteles",hotels);
+  //console.log("hoteles",hotels);
 
   return (
     <>
      <div>
-        <h1 className="text-4xl p-6 bg-blue-400 font-bold align-baseline flex justify-center">Reserva Ahora</h1>
+        <h1 className="text-4xl p-6  bg-gradient-to-r from-blue-500 to-blue-600 font-bold align-baseline flex justify-center">Reserva Ahora</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
             {
                 hotels.map((hotel) => (
