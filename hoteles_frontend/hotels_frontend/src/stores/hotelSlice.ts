@@ -12,7 +12,7 @@ export const createHotelSlice:StateCreator<HotelSliceType> = (set) => ({
 
 hotels: [],
 fetchHotels: async () => {
-    console.log("Fetching hotels...");
+    //console.log("Fetching hotels...");
     const hotels= await getHotels();
     set({
         hotels: hotels,
