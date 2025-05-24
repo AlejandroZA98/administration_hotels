@@ -7,7 +7,7 @@ type HotelsDetailProps = {
     hotel: Hotel
 }
 export default function HotelsDetail({hotel}:HotelsDetailProps) {
-    const fetchHotel= useAppStore((state)=>state.fetchHotel)
+    //const fetchHotel= useAppStore((state)=>state.fetchHotel)
   
   const navigate = useNavigate();
   function handleClick() {

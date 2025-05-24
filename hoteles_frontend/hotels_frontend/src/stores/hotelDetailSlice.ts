@@ -4,7 +4,10 @@ import { getHotel } from "../services/HotelServices";
 
 export type HotelDetailSliceType = {
     hotel: Hotel
-    fetchHotel: (id: string) => Promise<void>
+    fetchHotel: (id: Hotel['id']) => Promise<void>
+    modal: boolean
+    showModal: () => void
+    hideModal: () => void
 };
 
 export const createHotelDetailSlice: StateCreator<HotelDetailSliceType> = (set) => ({
@@ -17,7 +20,8 @@ hotel:{
     url: "",
    
 },
-fetchHotel: async (id: Hotel['id']) => {
+modal: false,
+fetchHotel: async (id) => {
     //console.log("Renderizando Hotel...", id)
     const hotel= await getHotel(id);
     //console.log("Hotel", hotel)
@@ -25,7 +29,16 @@ fetchHotel: async (id: Hotel['id']) => {
         hotel: hotel,
     })
 },
-
+showModal: () => {
+    set((state) => ({
+        modal: true,
+    }))
+},
+hideModal: () => {
+    set((state) => ({
+        modal: false,
+    }))
+},
 
 
 })

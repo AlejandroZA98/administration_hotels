@@ -6,6 +6,7 @@ import {lazy,Suspense} from 'react'
 const IndexPage = lazy(()=> import ('./views/IndexPage'))
 const HotelsPage = lazy(()=> import ('./views/hotels'))
 const HotelDetailPage = lazy(()=> import ('./views/hotel_detail')) 
+const CreateReservationPage = lazy(()=> import ('./views/createReservation'))
 export default function AppRouter() {
     return (
         <BrowserRouter>
@@ -24,6 +25,11 @@ export default function AppRouter() {
                     <Route path="/hotel/:id" element={
                         <Suspense fallback="Loading...">
                             <HotelDetailPage/>
+                        </Suspense>}/>
+
+                    <Route path="/create_reservation/" element={
+                        <Suspense fallback="Loading...">
+                            <CreateReservationPage/>
                         </Suspense>}/>
 
                 </Route>

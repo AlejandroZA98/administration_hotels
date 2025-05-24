@@ -8,6 +8,6 @@ class RoomSerializer(serializers.ModelSerializer):
 
     def validate_room_number(self, value):
         # Validación extra para el número de habitación (si deseas alguna validación personalizada)
-        if len(value) < 1:
+        if value <= 1:
             raise serializers.ValidationError("El número de habitación no puede estar vacío.")
         return value
