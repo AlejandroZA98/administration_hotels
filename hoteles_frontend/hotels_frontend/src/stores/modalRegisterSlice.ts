@@ -6,6 +6,7 @@ import { createNotificationSlice, type NotificationSliceType } from "./notificat
 export type ModalRegisterSliceType = {
 registerClient: (data: Client) => Promise<void>
 clientInfo: Client
+loadClientFromStorage: () => void
 }
 export const createModalRegisterSlice: StateCreator<ModalRegisterSliceType & NotificationSliceType,[],[],ModalRegisterSliceType> = (set,get,api) => ({
     clientInfo: {
@@ -29,6 +30,7 @@ export const createModalRegisterSlice: StateCreator<ModalRegisterSliceType & Not
                     phone: data.phone
                 }
             })
+            localStorage.setItem("clientInfo", JSON.stringify(get().clientInfo));
              setTimeout(() => {
                 
                     set({
@@ -104,5 +106,14 @@ export const createModalRegisterSlice: StateCreator<ModalRegisterSliceType & Not
             
         }
      
+    },
+    loadClientFromStorage: () => {
+    const clientInfo = localStorage.getItem("clientInfo");
+    if (clientInfo) {
+        set({
+            clientInfo: JSON.parse(clientInfo)
+        })
     }
+
+}
 })

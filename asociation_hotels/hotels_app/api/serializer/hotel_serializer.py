@@ -12,7 +12,7 @@ class HotelSerializer(serializers.ModelSerializer):
     url=serializers.HyperlinkedIdentityField(view_name='hotel_detail')
     class Meta:
         model = Hotel
-        fields = ['id', 'name', 'address', 'email', 'phone', 'administrador',
+        fields = ['id', 'name', 'address', 'email', 'phone', 'administrador','floors',
                   'created_at', 'updated_at', 'room_details','total_rooms','administrador_name','url']
 
     def get_room_details(self, obj):

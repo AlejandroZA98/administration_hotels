@@ -23,6 +23,7 @@ export const HotelAPIResponseSchema = z.object({
     room_type: z.string(),
     room_number: z.number(),
     status: z.string(),
+    floor: z.number(),
   })
   
   export const RoomsAPIResponseSchema= z.array(RoomAPIResponseSchema)

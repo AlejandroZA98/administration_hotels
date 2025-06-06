@@ -4,7 +4,7 @@ from hotels_app.api.models.room_model import Room
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
-        fields = ['id', 'hotel', 'room_type', 'room_number', 'status', 'created_at', 'updated_at']
+        fields = ['id', 'hotel', 'room_type', 'room_number', 'status','floor', 'created_at', 'updated_at']
 
     def validate_room_number(self, value):
         # Validación extra para el número de habitación (si deseas alguna validación personalizada)
