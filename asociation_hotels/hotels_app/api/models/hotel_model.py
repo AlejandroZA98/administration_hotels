@@ -8,6 +8,7 @@ class Hotel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, unique=True)
     address = models.TextField()
+    floors = models.IntegerField(default=1)  # Número de pisos del hotel
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20)
 

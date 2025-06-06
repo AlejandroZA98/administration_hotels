@@ -19,5 +19,4 @@ fetchHotels: async () => {
     })
 },
 
-
 })

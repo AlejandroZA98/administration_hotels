@@ -8,9 +8,10 @@ export type HotelDetailSliceType = {
     modal: boolean
     showModal: () => void
     hideModal: () => void
+    loadHotelFromStorage: () => void
 };
 
-export const createHotelDetailSlice: StateCreator<HotelDetailSliceType> = (set) => ({
+export const createHotelDetailSlice: StateCreator<HotelDetailSliceType> = (set,get) => ({
 hotel:{
     id: "",
     name: "",
@@ -28,6 +29,7 @@ fetchHotel: async (id) => {
     set({
         hotel: hotel,
     })
+    localStorage.setItem("hotel", JSON.stringify(get().hotel));
 },
 showModal: () => {
     set((state) => ({
@@ -39,6 +41,13 @@ hideModal: () => {
         modal: false,
     }))
 },
+loadHotelFromStorage: () => {
+    const hotel = localStorage.getItem("hotel");
+    if (hotel) {
+        set({
+            hotel: JSON.parse(hotel)
+        })
+    }
 
-
+}
 })
