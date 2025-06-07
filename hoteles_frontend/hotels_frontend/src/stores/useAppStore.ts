@@ -9,16 +9,19 @@ import type { NotificationSliceType } from './notificationSlice';
 import { createNotificationSlice } from './notificationSlice';
 import type { RoomsSliceType } from './RoomsSlice';
 import { createRoomsSlice } from './RoomsSlice';
+import {createReservationSlice} from './reservationSlice';
+import type { ReservationType } from './reservationSlice';
 import { devtools } from "zustand/middleware";
 
 
 export const useAppStore = create<HotelSliceType & HotelDetailSliceType & ModalRegisterSliceType &
- NotificationSliceType & RoomsSliceType>()(devtools((...a)=>({
+ NotificationSliceType & RoomsSliceType & ReservationType>()(devtools((...a)=>({
     ...createHotelSlice(...a),
     ...createHotelDetailSlice(...a),
     ...createModalRegisterSlice(...a),
     ...createNotificationSlice(...a),
     ...createRoomsSlice(...a),
+    ...createReservationSlice(...a)
 
 })))
 

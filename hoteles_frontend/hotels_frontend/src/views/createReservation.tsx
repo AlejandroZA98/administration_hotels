@@ -2,24 +2,75 @@ import { useEffect, useState, type ChangeEvent } from 'react'
 import { useAppStore } from '../stores/useAppStore';
 import type { Rooms } from '../types';
 
+
+
+
 export default function createReservation() {
     const hotel = useAppStore((state) => state.hotel);
     const clientRegistered = useAppStore((state) => state.clientInfo);
     const fetchRooms = useAppStore((state) => state.fetchRooms);
     const rooms = useAppStore((state) => state.rooms);
     const [filterRooms,setRoomsFilter]=useState<Rooms>([]);
+
+    const createReservation = useAppStore((state) => state.createReservation);
+    const [filters, setFilters] = useState({
+        room_type: '',
+        floor: '',
+        room: '',
+    });
+    const [reservationData, setReservationData] = useState({
+        hotel: hotel.id,
+        client: clientRegistered.id,
+        room:'',
+        floor: 0,
+        check_in_date: '', // Fecha actual new Date().toISOString().split('T')[0]
+        check_out_date:'', // Fecha de mañana
+    });
     useEffect(() => {
         fetchRooms(hotel.id)
         }, [hotel]) 
 
-    const filteringRooms=(e:ChangeEvent<HTMLInputElement>| ChangeEvent<HTMLSelectElement>)=>{
-      console.log("Filtrando habitaciones",e.target.value) 
-      const filteredRooms= rooms.filter((room) => room.room_type === e.target.value && room.status === 'available');
-      setRoomsFilter(filteredRooms);
+    const filteringRooms=(e:ChangeEvent<HTMLSelectElement>)=>{
+      // console.log("Filtrando habitaciones",e.target.value) 
+      const { name, value } = e.target;
+      const updatedFilters = {
+        ...filters,
+        [name]: value
+      }
+      setFilters(updatedFilters);
+
+    const filtered = rooms.filter((room) => { // filtra las habitaciones segun 
+    const matchesType = updatedFilters.room_type ? room.room_type === updatedFilters.room_type : false; 
+    const matchesFloor = updatedFilters.floor ? room.floor === parseInt(updatedFilters.floor) : false;
+    const isAvailable = room.status === 'available';
+
+    return matchesType && matchesFloor && isAvailable;
+     });
+
+    setRoomsFilter(filtered);
+
+    
+    setReservationData({
+          ...reservationData,
+          room: updatedFilters.room != '' ? updatedFilters.room : '',
+          floor: updatedFilters.floor? parseInt(updatedFilters.floor): 0,
+        })
+ 
     }
+
+   
+
+
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+       // console.log("Formulario enviado");
+        createReservation(reservationData)
+
+    };
   return (
 <>
-<div className=" flex justify-center items-center pt-10   bg-gray-100">
+<form className=" flex justify-center items-center pt-10   bg-gray-100" onSubmit={handleSubmit}>
   <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center p-8 max-w-6xl m-auto justify-between bg-white shadow-xl rounded-xl">
     <img 
       src="/hotel.jpg" 
@@ -44,22 +95,20 @@ export default function createReservation() {
         <option value="double">Doble</option>
         <option value="suite">Suite</option>
       </select>
-    <label htmlFor="floor" className="block text-black uppercase font-bold text-lg mt-3">Piso</label>
-      <select name="floor" id="floor" className='w-full p-3 border border-gray-300 rounded-lg '>
+
+      <label htmlFor="floor" className="block text-black uppercase font-bold text-lg mt-3">Piso</label>
+      <select name="floor" id="floor" className='w-full p-3 border border-gray-300 rounded-lg' value={reservationData.floor} onChange={filteringRooms}>
         <option value="">--Seleccionar--</option>
-        {
-          filterRooms.map((room) => (
-            <option key={room.id} value={room.floor}>
-              {room.room_number}
-              
-            </option>
-          ))
-          
-        }
+        {Array.from({ length: hotel.floors }, (_, i) => (
+          <option key={i + 1} value={i + 1}>
+            {i + 1}
+          </option>
+        ))}
+
       </select>
 
-      <label htmlFor="room" className="block text-black uppercase font-bold text-lg mt-3">Numero de habitacion</label>
-      <select name="room" id="room" className='w-full p-3 border border-gray-300 rounded-lg '>
+      <label htmlFor="room" className="block text-black uppercase font-bold text-lg mt-3" >Numero de habitacion</label>
+      <select name="room" id="room" className='w-full p-3 border border-gray-300 rounded-lg 'value={reservationData.room} onChange={filteringRooms}>
         <option value="">--Seleccionar--</option>
         {
           filterRooms.map((room) => (
@@ -71,16 +120,19 @@ export default function createReservation() {
           
         }
       </select>
+
+     
+
       
       <button 
-        type="button" 
+        type="submit" 
         className="mt-6 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl shadow transition-colors w-full"
       >
         Confirmar Reservacion
       </button>
     </div>
   </div>
-</div>
+</form>
 
 
 </>

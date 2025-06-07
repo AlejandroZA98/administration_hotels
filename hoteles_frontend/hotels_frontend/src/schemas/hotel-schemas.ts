@@ -7,6 +7,7 @@ export const HotelAPIResponseSchema = z.object({
     email: z.string(),
     phone: z.string(),
     url: z.string().url(),
+    floors: z.number(),
   });
 
   export const HotelsAPIResponseSchema= z.array(HotelAPIResponseSchema)
@@ -27,3 +28,12 @@ export const HotelAPIResponseSchema = z.object({
   })
   
   export const RoomsAPIResponseSchema= z.array(RoomAPIResponseSchema)
+
+  export const ReservationAPIResponseSchema = z.object({
+    client: z.string(),
+    hotel: z.string(),
+    room: z.string(),
+    floor: z.number(),
+    check_in_date: z.string().datetime(),
+    check_out_date: z.string().datetime(),
+  })

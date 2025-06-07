@@ -41,16 +41,30 @@ export async function registerClient(dataClient: any) {
 }
 
 export async function getRooms(hotelId: Hotel["id"]) {
-    console.log("Buscando cuartos...", hotelId);
+//console.log("Buscando cuartos...", hotelId);
     const url=`http://127.0.0.1:8000/hotels/rooms-list/${hotelId}/`
     const data=await axios.get(url)
     const result=RoomsAPIResponseSchema.safeParse(data.data)
-    console.log("DATOS",data)
-    console.log("DATOS2",data.data)
-    console.log("RESULT",result)
+    // console.log("DATOS",data)
+    // console.log("DATOS2",data.data)
+    // console.log("RESULT",result)
     if (result.success) {
-        console.log("CUARTOS CORRECTOS", result.data)
+       // console.log("CUARTOS CORRECTOS", result.data)
         return data.data;
+    }
+    
+}
+
+export async function createReservation(data: any) {
+    console.log("Creando RESERVA:", data);
+    const url=`http://127.0.0.1:8000/reservations/reservation-create/`
+    try {
+        const response = await axios.post(url, data);
+        console.log("DATOS", response.data);
+        return response.data;
+    } catch (error: any) {
+        console.error("Error creating reservation", error);
+        return error.response.data;
     }
     
 }
