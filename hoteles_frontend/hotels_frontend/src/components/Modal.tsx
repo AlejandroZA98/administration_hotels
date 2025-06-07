@@ -25,15 +25,15 @@ export default function Modal() {
     }
   useEffect(() => {
           if (clientRegistered.id) {
-            console.log("CLIENTE REGISTRADO (efectivamente):", clientRegistered)
+          //  console.log("CLIENTE REGISTRADO (efectivamente):", clientRegistered)
             navigate(`/create_reservation/`);
-            console.log("NAVEGANDO A RESERVA")
+            //console.log("NAVEGANDO A RESERVA")
           }
         }, [clientRegistered]) 
 
     function handleRegister() {
         registerClient(clientInfo)
-        console.log( "REGISTRO")
+      //  console.log( "REGISTRO")
         closeModal()
         // if (clientRegistered.id) {
         //     console.log("CLIENTE REGISTRADO:", clientRegistered)

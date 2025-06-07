@@ -19,6 +19,7 @@ hotel:{
     email: "",
     phone: "",
     url: "",
+    floors: 0,
    
 },
 modal: false,
