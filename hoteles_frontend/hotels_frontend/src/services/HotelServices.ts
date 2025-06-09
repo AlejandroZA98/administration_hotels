@@ -61,6 +61,7 @@ export async function createReservation(data: any) {
     try {
         const response = await axios.post(url, data);
         console.log("DATOS", response.data);
+
         return response.data;
     } catch (error: any) {
         console.error("Error creating reservation", error);
