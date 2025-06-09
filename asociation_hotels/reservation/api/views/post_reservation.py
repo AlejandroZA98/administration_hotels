@@ -7,13 +7,19 @@ from hotels_app.api.models.room_model import Room
 
 class CreateReservationView(APIView):
     def post(self, request):
+        client= request.data.get('client')
+        room_id = request.data.get('room')
+        hotel_id = request.data.get('hotel')
+        
+        if Reservation.objects.filter(client=client,hotel_id=hotel_id).exists():
+            return Response(
+                {"error": "El cliente ya tiene una reserva activa."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         serializer = ReservationSerializer(data=request.data, context={'request': request})
         
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        room_id = request.data.get('room')
-        hotel_id = request.data.get('hotel')
 
         if not Room.objects.filter(id=room_id, hotel_id=hotel_id).exists():
             return Response(
