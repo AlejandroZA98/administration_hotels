@@ -1,9 +1,10 @@
 import { useEffect, useState, type ChangeEvent } from 'react'
 import { useAppStore } from '../stores/useAppStore';
 import type { Rooms } from '../types';
+import { useNavigate } from 'react-router-dom';
 
-
-
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function createReservation() {
     const hotel = useAppStore((state) => state.hotel);
@@ -11,6 +12,10 @@ export default function createReservation() {
     const fetchRooms = useAppStore((state) => state.fetchRooms);
     const rooms = useAppStore((state) => state.rooms);
     const [filterRooms,setRoomsFilter]=useState<Rooms>([]);
+
+    const [checkInDate, setCheckInDate] = useState<Date | null>(null);
+    const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
+    const navigate = useNavigate();
 
     const createReservation = useAppStore((state) => state.createReservation);
     const [filters, setFilters] = useState({
@@ -54,18 +59,44 @@ export default function createReservation() {
           ...reservationData,
           room: updatedFilters.room != '' ? updatedFilters.room : '',
           floor: updatedFilters.floor? parseInt(updatedFilters.floor): 0,
+         
         })
  
     }
+    useEffect(() => {
+        if (checkInDate) {
+            setReservationData((prevData) => ({
+                ...prevData,
+                check_in_date: checkInDate.toISOString().split('T')[0], // Formato YYYY-MM-DD
+                check_out_date: checkOutDate ? checkOutDate.toISOString().split('T')[0] : '', // Formato YYYY-MM-DD
+            }));
+        }}, [checkInDate,checkOutDate]);
 
+    
    
-
-
-
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
        // console.log("Formulario enviado");
         createReservation(reservationData)
+        setReservationData({
+            hotel: '',
+            client: '',
+            room: '',
+            floor: 0,
+
+            check_in_date: '', // Fecha actual new Date().toISOString().split('T')[0]
+            check_out_date: '', // Fecha de mañana
+        });
+        setFilters({
+            room_type: '',
+            floor: '',
+            room: '',
+        });
+      setTimeout(() => {
+                
+      navigate(`/hotels` );
+      }, 1000)
+
 
     };
   return (
@@ -121,8 +152,35 @@ export default function createReservation() {
         }
       </select>
 
-     
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+        <div className="flex flex-col">
+          <label htmlFor="check_in_date" className="text-gray-700 font-semibold mb-2">
+            Fecha de entrada
+          </label>
+          <DatePicker
+            selected={checkInDate}
+            onChange={(date: Date | null) => setCheckInDate(date)}
+            dateFormat="yyyy-MM-dd"
+            placeholderText="Selecciona una fecha"
+            className="p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+          />
+        </div>
 
+        <div className="flex flex-col">
+          <label htmlFor="check_out_date" className="text-gray-700 font-semibold mb-2">
+            Fecha de salida
+          </label>
+          <DatePicker
+            selected={checkOutDate}
+            onChange={(date: Date | null) => setCheckOutDate(date)}
+            dateFormat="yyyy-MM-dd"
+            placeholderText="Selecciona una fecha"
+            className="p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+          />
+        </div>
+      </div>
+
+      
       
       <button 
         type="submit" 
