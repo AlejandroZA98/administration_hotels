@@ -69,3 +69,17 @@ export async function createReservation(data: any) {
     }
     
 }
+
+export async function createLogin(data: any) {
+    console.log("Creando LOGIN:", data);
+    const url=`http://127.0.0.1:8000/users/api/token/`
+    try{
+        const response = await axios.post(url, data);
+        //console.log("DATOS", response.data);
+        return response.data;
+    }
+    catch (error: any) {
+      //  console.error("Error creating login", error);
+        return error.response.data;
+    }
+}

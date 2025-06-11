@@ -7,6 +7,8 @@ const IndexPage = lazy(()=> import ('./views/IndexPage'))
 const HotelsPage = lazy(()=> import ('./views/hotels'))
 const HotelDetailPage = lazy(()=> import ('./views/hotel_detail')) 
 const CreateReservationPage = lazy(()=> import ('./views/createReservation'))
+const LoginUsers = lazy(()=> import ('./views/LoginUsers'))
+const AdminHotels= lazy(()=> import ('./views/adminhotels'))
 export default function AppRouter() {
     return (
         <BrowserRouter>
@@ -18,11 +20,11 @@ export default function AppRouter() {
                             <IndexPage/>
                         </Suspense>} />
                         
-                    <Route path="/hotels" element={
+                    <Route path="/hotels/" element={
                         <Suspense fallback="Loading...">
                             <HotelsPage/>
                         </Suspense>}/>
-                    <Route path="/hotel/:id" element={
+                    <Route path="/hotel/:id/" element={
                         <Suspense fallback="Loading...">
                             <HotelDetailPage/>
                         </Suspense>}/>
@@ -32,6 +34,20 @@ export default function AppRouter() {
                             <CreateReservationPage/>
                         </Suspense>}/>
 
+                </Route>
+
+                <Route>
+                        <Route path="login/" element={
+                            <Suspense fallback="Loading...">
+                                <LoginUsers/>
+                            </Suspense>
+                        }/>
+
+                        <Route path="adminhotels/" element={
+                            <Suspense fallback="Loading...">
+                                <AdminHotels/>
+                            </Suspense>
+                        }/>
                 </Route>
             </Routes>
         </BrowserRouter>
