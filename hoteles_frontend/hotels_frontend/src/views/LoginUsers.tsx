@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppStore } from "../stores/useAppStore";
 import Notification from "../components/Notification";
 import { useNavigate } from 'react-router-dom';
@@ -6,12 +6,18 @@ import { useNavigate } from 'react-router-dom';
 export default function LoginUsers() {
   const [isLogin, setIsLogin] = useState(true);
   const login= useAppStore((state)=>state.login)
+  const hotels = useAppStore((state) => state.hotels);
+  const fetchHotels = useAppStore((state) => state.fetchHotels);
+    useEffect(() => {
+        fetchHotels();
+    },[])
   const navigate = useNavigate();
   const [dataLogin,setdataLogin]=useState({
     username:'',
-    password:''
+    password:'',
+    hotel:''
   })
-  const handleChange=(e: React.ChangeEvent<HTMLInputElement>)=>{
+  const handleChange=(e: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLSelectElement>)=>{
     //console.log("Cambiando",e.target.name, e.target.value);
     setdataLogin({
         ...dataLogin,
@@ -22,9 +28,9 @@ export default function LoginUsers() {
     e.preventDefault()
     //console.log("Registreando")
     const loginAcces= await login(dataLogin)
-    console.log("DATOS LOGIN",loginAcces);
+    //console.log("DATOS LOGIN",loginAcces);
     if (loginAcces?.access) {
-        console.log("Login EXITOSO", loginAcces);
+        //console.log("Login EXITOSO", loginAcces);
         navigate('/adminhotels/')
      }
   }
@@ -106,6 +112,24 @@ export default function LoginUsers() {
                 name="password"
               />
             </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2" htmlFor="hotel">
+                Hotel
+              </label>
+              <select name="hotel" id="hotel" className='w-full p-3 border border-gray-300 rounded-lg' value={dataLogin.hotel} onChange={handleChange}>
+                <option value="">--Seleccionar--</option>
+                {
+                  hotels.map((hotel) => (
+                    <option key={hotel.id} value={hotel.id}>
+                      {hotel.name}
+                    </option>
+                  ))
+                }
+            </select>
+            </div>
+
+            
 
             {!isLogin && (
               <div className="mb-4">
