@@ -15,7 +15,7 @@ export default function LoginUsers() {
   const [dataLogin,setdataLogin]=useState({
     username:'',
     password:'',
-    hotel:''
+    hotel_id:''
   })
   const handleChange=(e: React.ChangeEvent<HTMLInputElement>|React.ChangeEvent<HTMLSelectElement>)=>{
     //console.log("Cambiando",e.target.name, e.target.value);
@@ -117,7 +117,7 @@ export default function LoginUsers() {
               <label className="block text-gray-700 mb-2" htmlFor="hotel">
                 Hotel
               </label>
-              <select name="hotel" id="hotel" className='w-full p-3 border border-gray-300 rounded-lg' value={dataLogin.hotel} onChange={handleChange}>
+              <select name="hotel_id" id="hotel_id" className='w-full p-3 border border-gray-300 rounded-lg' value={dataLogin.hotel_id} onChange={handleChange}>
                 <option value="">--Seleccionar--</option>
                 {
                   hotels.map((hotel) => (

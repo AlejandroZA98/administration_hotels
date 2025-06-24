@@ -6,10 +6,11 @@ export async function getHotels() {
     const url='http://127.0.0.1:8000/hotels/hotels-list/'
     const data=await axios.get(url)
     const result=HotelsAPIResponseSchema.safeParse(data.data)
-    // console.log("DATOS",data)
+    //console.log("DATOS",data)
     // console.log("DATOS2",data.data)
     // console.log("RESULT",result)
     if (result.success) {
+        console.log("HOTELS CORRECTOS", result.data)
         return result.data;
     }
 
@@ -86,10 +87,10 @@ export async function createLogin(data: any) {
 
 export async function getHotelInfo(data: any) {
   //console.log("Obteniendo información del hotel con tokens:", data);
-  const { access, refresh,hotel} = data;
-  console.log("HOTEL ID",hotel);
+  const { access, refresh,hotel_id} = data;
+//  console.log("HOTEL ID",hotel_id);
   const makeRequest = async (token: string) => {
-    return await fetch(`http://127.0.0.1:8000/hotels/hotel-detail/${hotel}/`, {
+    return await fetch(`http://127.0.0.1:8000/hotels/hotel-detail/${hotel_id}/`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -127,7 +128,7 @@ export async function getHotelInfo(data: any) {
 
   if (response.ok) {
     const hotelData = await response.json();
-  //  console.log("Información del hotel:", hotelData);
+ //   console.log("Información del hotel:", hotelData);
     return hotelData;
   } else {
     throw new Error("Error al obtener información del hotel");
