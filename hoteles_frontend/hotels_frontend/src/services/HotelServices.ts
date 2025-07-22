@@ -134,3 +134,45 @@ export async function getHotelInfo(data: any) {
     throw new Error("Error al obtener información del hotel");
   }
 }
+
+export async function updateHotel(data: Partial<Hotel>) {
+  console.log("Actualizando hotel:", data);
+  const accessToken = localStorage.getItem("accessToken") ??"";
+  const refresh = localStorage.getItem("refreshToken");
+  const hotelId = localStorage.getItem("hotel_id");
+
+  const makeRequest = async (accessToken: string) => {
+  return await fetch(`http://127.0.0.1:8000/hotels/hotel-detail/${hotelId}/`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  }
+ let response = await makeRequest(accessToken);
+ if (response.status === 401) {
+   const refreshResponse = await fetch("http://127.0.0.1:8000/users/api/token/refresh/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refresh }),
+    });
+    if (refreshResponse.ok) {
+      const refreshData = await refreshResponse.json();
+      const newAccess = refreshData.access;
+
+      // Guarda el nuevo access token
+      localStorage.setItem("accessToken", newAccess);
+
+      // Reintenta la petición original con el nuevo token
+      response = await makeRequest(newAccess);
+    } else {
+      throw new Error("No se pudo refrescar el token");
+    }
+
+ }
+
+}
