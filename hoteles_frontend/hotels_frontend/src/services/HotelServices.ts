@@ -6,10 +6,11 @@ export async function getHotels() {
     const url='http://127.0.0.1:8000/hotels/hotels-list/'
     const data=await axios.get(url)
     const result=HotelsAPIResponseSchema.safeParse(data.data)
-    // console.log("DATOS",data)
+    //console.log("DATOS",data)
     // console.log("DATOS2",data.data)
     // console.log("RESULT",result)
     if (result.success) {
+        console.log("HOTELS CORRECTOS", result.data)
         return result.data;
     }
 
@@ -86,10 +87,10 @@ export async function createLogin(data: any) {
 
 export async function getHotelInfo(data: any) {
   //console.log("Obteniendo información del hotel con tokens:", data);
-  const { access, refresh,hotel} = data;
-  console.log("HOTEL ID",hotel);
+  const { access, refresh,hotel_id} = data;
+//  console.log("HOTEL ID",hotel_id);
   const makeRequest = async (token: string) => {
-    return await fetch(`http://127.0.0.1:8000/hotels/hotel-detail/${hotel}/`, {
+    return await fetch(`http://127.0.0.1:8000/hotels/hotel-detail/${hotel_id}/`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -127,9 +128,62 @@ export async function getHotelInfo(data: any) {
 
   if (response.ok) {
     const hotelData = await response.json();
-  //  console.log("Información del hotel:", hotelData);
+ //   console.log("Información del hotel:", hotelData);
     return hotelData;
   } else {
     throw new Error("Error al obtener información del hotel");
+  }
+}
+
+export async function updateHotel(data: Partial<Hotel>) {
+  console.log("Actualizando hotel:", data);
+  const accessToken = localStorage.getItem("accessToken") ??"";
+  const refresh = localStorage.getItem("refreshToken");
+  const hotelId = localStorage.getItem("hotel_id");
+
+  const makeRequest = async (accessToken: string) => {
+  return await fetch(`http://127.0.0.1:8000/hotels/hotel-detail/${hotelId}/`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  }
+ let response = await makeRequest(accessToken);
+ if (response.status === 401) {
+   const refreshResponse = await fetch("http://127.0.0.1:8000/users/api/token/refresh/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refresh }),
+    });
+    if (refreshResponse.ok) {
+      const refreshData = await refreshResponse.json();
+      const newAccess = refreshData.access;
+
+      // Guarda el nuevo access token
+      localStorage.setItem("accessToken", newAccess);
+
+      // Reintenta la petición original con el nuevo token
+      response = await makeRequest(newAccess);
+    } else {
+      throw new Error("No se pudo refrescar el token");
+    }
+
+ }
+
+}
+
+export async function createRoom(data: any) {
+  const hotelID = localStorage.getItem("hotel_id");
+  const url=`http://127.0.0.1:8000/hotels/rooms-create/`
+  try {
+    const response = await axios.post(url, { ...data, hotel: hotelID });
+    return response.data;
+  } catch (error: any) {
+    return error.response.data;
   }
 }

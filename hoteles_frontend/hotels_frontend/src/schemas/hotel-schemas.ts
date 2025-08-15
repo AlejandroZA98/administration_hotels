@@ -8,6 +8,16 @@ export const HotelAPIResponseSchema = z.object({
     phone: z.string(),
     url: z.string().url(),
     floors: z.number(),
+    administrador: z.string().optional(),
+    administrador_name: z.string().optional(),
+    room_details: z.object({
+      double_rooms: z.number().optional(),
+      single_rooms: z.number().optional(),
+      suite_rooms: z.number().optional(),
+      total_rooms: z.number().optional(),
+    }).optional(),
+    total_rooms: z.number().optional(),
+    
   });
 
   export const HotelsAPIResponseSchema= z.array(HotelAPIResponseSchema)

@@ -13,18 +13,21 @@ import {createReservationSlice} from './reservationSlice';
 import type { ReservationType } from './reservationSlice';
 import { logInSlice} from './logInSlice';
 import type { LogInSliceType } from './logInSlice'; 
-import { devtools } from "zustand/middleware";
+import {updateLoginSlice} from './updateHotelSlice';
+import type { UpdateLoginSliceType } from './updateHotelSlice';
+import { devtools } from "zustand/middleware";  
 
 
 export const useAppStore = create<HotelSliceType & HotelDetailSliceType & ModalRegisterSliceType &
- NotificationSliceType & RoomsSliceType & ReservationType & LogInSliceType>()(devtools((...a)=>({
+ NotificationSliceType & RoomsSliceType & ReservationType & LogInSliceType & UpdateLoginSliceType>()(devtools((...a)=>({
     ...createHotelSlice(...a),
     ...createHotelDetailSlice(...a),
     ...createModalRegisterSlice(...a),
     ...createNotificationSlice(...a),
     ...createRoomsSlice(...a),
     ...createReservationSlice(...a),
-    ...logInSlice(...a)
+    ...logInSlice(...a),
+    ...updateLoginSlice(...a),
 
 })))
 
