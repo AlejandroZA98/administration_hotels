@@ -187,3 +187,15 @@ export async function createRoom(data: any) {
     return error.response.data;
   }
 }
+
+export async function getAllReservations(hotelId: string, status: string) {
+ // console.log("Peticion reservas del hotel con ID:", hotelId);
+  const url=`http://127.0.0.1:8000/reservations/reservations/${hotelId}/?status=${status}`;
+  try {
+    const response = await axios.get(url);
+    
+    return response.data;
+  } catch (error: any) {
+    return error.response.data;
+  }
+}
