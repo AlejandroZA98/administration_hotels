@@ -46,4 +46,11 @@ export const HotelAPIResponseSchema = z.object({
     floor: z.number(),
     check_in_date: z.string().datetime(),
     check_out_date: z.string().datetime(),
+    
+    id: z.string().optional(),
+    client_name: z.string().optional(),
+    status: z.string().optional(),
+    room_info: z.string().optional(),
+    client_email: z.string().email().optional(),
+    client_phone: z.string().optional(),
   })

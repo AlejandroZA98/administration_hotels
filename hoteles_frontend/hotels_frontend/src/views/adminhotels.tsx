@@ -1,6 +1,7 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useAppStore } from "../stores/useAppStore";
 import { useStore } from "zustand";
+import ReservationDetail from "../components/ReservationDetail";
 
 export default function () {
     const isLogin = useAppStore((state) => state.getTokens);
@@ -8,10 +9,8 @@ export default function () {
     const [activeTab, setActiveTab] = useState("general");
     const updateHotel = useAppStore((state) => state.updateHotel);
     const createRoom = useAppStore((state) => state.fetchCreateRoom);
-    useEffect(() => {
-        isLogin();}, []);
-
-    //console.log("Verificando si el usuario esta logueado", hotel);
+    const getReservations = useAppStore((state) => state.getReservations);
+    const reservations = useAppStore((state) => state.reservations);
     const [hotelData,setHotelData]= useState({
         name: "",
         address: "",
@@ -27,6 +26,9 @@ export default function () {
         floor: 0,
         room_number: 0,
     })
+     const [status, setStatus] = useState('');
+    useEffect(() => {
+        isLogin();}, []);
 
     useEffect(() => {
     if (hotel) {
@@ -40,11 +42,13 @@ export default function () {
     }
   }, [hotel]);
 
-  // useEffect(() => {},[])
-   // console.log("Datos del hotel", hotelData);
+    useEffect(() => {
+        getReservations(status);
+    }, [status]);
+
 
     const handleChange=(e:ChangeEvent<HTMLInputElement>| ChangeEvent<HTMLSelectElement>)=>{
-    console.log("cambiando datos", e.target.name, e.target.value);
+   // console.log("cambiando datos", e.target.name, e.target.value);
     setHotelData({
             ...hotelData,
             [e.target.name]:e.target.value
@@ -71,6 +75,13 @@ export default function () {
               room_number: 0,
           });
       }
+    const filteringStatus = (e: ChangeEvent<HTMLSelectElement>) => {
+      const { name, value } = e.target;
+      //console.log("Filtrando status", name, value);
+      setStatus(value);
+      // setStatus(updatedFilters);      
+    }
+      
   
     
   return (
@@ -112,7 +123,7 @@ export default function () {
             activeTab === "services" ? "border-b-2 border-blue-600 text-blue-600" : "text-gray-500"
           }`}
         >
-          Servicios
+          Soliciudes de reservaciones
         </button>
       </div>
 
@@ -254,7 +265,41 @@ export default function () {
 
         {activeTab === "services" && (
           <div className="bg-white p-6 rounded-lg shadow">
-            <p className="text-gray-700">Aquí iría la sección de servicios ✨</p>
+            <p className="text-gray-700">Acepta o rechaza reservaciones</p>
+
+            <div className="flex flex-col items-end mt-4 space-y-2">
+              <label 
+                htmlFor="status" 
+                className="text-black uppercase font-bold text-lg tracking-wide"
+              >
+                Status
+              </label>
+
+              <select
+                name="status"
+                id="status"
+                className="p-3 w-48 border bg-blue-400 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+                onChange={filteringStatus}
+              >
+                <option value="">Todas</option>
+                <option value="canceled">Cancelada</option>
+                <option value="pending">Pendiente</option>
+                <option value="aproved">Aprobada</option>
+              </select>
+            </div>
+
+
+            
+          <div className="flex grid-cols-1 md:grid-cols-2 lg:grid-cols gap-4 p-6">
+            {
+                reservations.map((reservation) => (
+                    <ReservationDetail
+                    key={reservation.client}
+                    reservation={reservation}
+                    ></ReservationDetail>
+                ))
+            }
+            </div>
             {/* Inputs de servicios que ofrece el hotel */}
           </div>
         )}

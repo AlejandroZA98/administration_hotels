@@ -1,13 +1,14 @@
 import type { StateCreator } from "zustand";
 import type { Client, Hotel, Reservation } from "../types";
-import { createReservation } from "../services/HotelServices";
+import { createReservation, getAllReservations } from "../services/HotelServices";
 import { createNotificationSlice, type NotificationSliceType } from "./notificationSlice";
 
 export type ReservationType = {
     createReservation: (data: Reservation )=> Promise<void>
     clientInfo: Client
     hotel: Hotel
-    
+    getReservations: (status: string)=>Promise<void>
+    reservations: Reservation[]
 }
 
 export const createReservationSlice: StateCreator<ReservationType&NotificationSliceType, [], [], ReservationType> = (set, get,api) => ({
@@ -27,7 +28,8 @@ export const createReservationSlice: StateCreator<ReservationType&NotificationSl
     floors: 0,
    
 },
-    createReservation: async (dataReservation) => {
+reservations: [],
+createReservation: async (dataReservation) => {
     //console.log("Creando reservacion:", dataReservation);
    
     const data= await createReservation(dataReservation)
@@ -68,6 +70,19 @@ export const createReservationSlice: StateCreator<ReservationType&NotificationSl
         
 
     }
+},
+getReservations: async (status) => {
+    const hotelId = localStorage.getItem("hotel_id");
+    if (!hotelId) {
+        createNotificationSlice(set,get,api).showNotification({text:'No existe un hotel',error:false}) // Mostrar notificacion de que se elimino de favoritos
+        return;
+    }
+    const allReservations= await getAllReservations(hotelId, status);
+    set({
+        reservations: allReservations,
+    })
+    //console.log(allReservations);
+    return allReservations ;
 }
 
 

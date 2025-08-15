@@ -30,4 +30,4 @@ class Room(models.Model):
             models.UniqueConstraint(fields=['hotel', 'room_number'], name='unique_room_number_per_hotel')
         ]    
     def __str__(self):
-        return f"Room {self.room_number} - {self.room_type} ({self.status})"
+        return f" {self.room_number} - {self.room_type} ({self.status})"

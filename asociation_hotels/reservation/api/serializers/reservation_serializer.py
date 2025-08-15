@@ -10,6 +10,9 @@ class ReservationSerializer(serializers.ModelSerializer):
     hotel = serializers.PrimaryKeyRelatedField(queryset=Hotel.objects.all(), many=False)
     room = serializers.PrimaryKeyRelatedField(queryset=Room.objects.all(), many=False)
     
+    client_email = serializers.StringRelatedField(source='client.email', read_only=True)
+    client_phone = serializers.StringRelatedField(source='client.phone', read_only=True)
+
     client_name = serializers.StringRelatedField(source='client', read_only=True)
     hotel_info = serializers.StringRelatedField(source='hotel', read_only=True)
     room_info = serializers.StringRelatedField(source='room', read_only=True)
@@ -17,7 +20,8 @@ class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
         fields = ['id', 'client', 'hotel','room','check_in_date',
-                  'check_out_date', 'status', 'created_at', 'updated_at', 'url', 'client_name','hotel_info','room_info']
+                  'check_out_date', 'status', 'created_at', 'updated_at', 'url', 'client_name','hotel_info','room_info',
+                  'client_email','client_phone']
 
     def validate(self, data):
         check_in = data.get('check_in_date')
