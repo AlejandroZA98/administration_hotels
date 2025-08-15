@@ -176,3 +176,14 @@ export async function updateHotel(data: Partial<Hotel>) {
  }
 
 }
+
+export async function createRoom(data: any) {
+  const hotelID = localStorage.getItem("hotel_id");
+  const url=`http://127.0.0.1:8000/hotels/rooms-create/`
+  try {
+    const response = await axios.post(url, { ...data, hotel: hotelID });
+    return response.data;
+  } catch (error: any) {
+    return error.response.data;
+  }
+}

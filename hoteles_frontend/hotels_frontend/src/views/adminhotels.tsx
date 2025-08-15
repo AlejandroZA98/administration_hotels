@@ -7,6 +7,7 @@ export default function () {
     const hotel = useAppStore((state) => state.hotel);
     const [activeTab, setActiveTab] = useState("general");
     const updateHotel = useAppStore((state) => state.updateHotel);
+    const createRoom = useAppStore((state) => state.fetchCreateRoom);
     useEffect(() => {
         isLogin();}, []);
 
@@ -21,7 +22,13 @@ export default function () {
         total_rooms: 1,
 
     });
-     useEffect(() => {
+    const [roomData,setroomData]=useState({
+        room_type: "",
+        floor: 0,
+        room_number: 0,
+    })
+
+    useEffect(() => {
     if (hotel) {
       setHotelData({
         name: hotel.name,
@@ -32,6 +39,8 @@ export default function () {
         total_rooms: hotel.total_rooms??0,});
     }
   }, [hotel]);
+
+  // useEffect(() => {},[])
    // console.log("Datos del hotel", hotelData);
 
     const handleChange=(e:ChangeEvent<HTMLInputElement>| ChangeEvent<HTMLSelectElement>)=>{
@@ -45,6 +54,25 @@ export default function () {
     e.preventDefault()
     updateHotel(hotelData)
     }
+
+    const handleChangeRoom = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
+    setroomData({
+            ...roomData,
+            [e.target.name]: e.target.value
+        });
+    }
+    const handlecreateRoom = (e: React.FormEvent) => {
+    e.preventDefault();
+   // console.log("Creando habitacion", );
+    const create_Room= createRoom(roomData);
+    setroomData({
+              room_type: "",
+              floor: 0,
+              room_number: 0,
+          });
+      }
+  
+    
   return (
     <>
 
@@ -176,9 +204,51 @@ export default function () {
         )}
 
         {activeTab === "rooms" && (
-          <div className="bg-white p-6 rounded-lg shadow">
-            <p className="text-gray-700">Aquí iría la sección de habitaciones 🛏️</p>
+          <div className="bg-white p-6 rounded-lg shadow mt-4">
             {/* Puedes agregar inputs para `single_rooms`, `double_rooms`, etc. */}
+            <p className="text-gray-700"> Crea habitaciones para tus clientes</p>
+            <form >
+            <label htmlFor="room_type" className='block text-black uppercase font-bold text-lg pt-5 mt-3'>Tipo de habitacion</label>
+            <select name="room_type" id="room_type" className='w-full p-3 border border-gray-300 rounded-lg' onChange={handleChangeRoom} value={roomData.room_type}>
+              <option value="">--Seleccionar--</option>
+              <option value="single">Individual</option>
+              <option value="double">Doble</option>
+              <option value="suite">Suite</option>
+
+            </select>
+            <label htmlFor="floor" className="block text-xl font-bold mt-3">
+                Piso:
+            </label>
+            <input
+                className="w-full p-2 border border-gray-300 rounded "
+                type="room"
+                name="floor"
+                onChange={handleChangeRoom}
+                value={roomData.floor}
+
+            />
+
+            <label htmlFor="floor" className="block text-xl font-bold mt-3">
+                Numero de habitacion:
+            </label>
+            <input
+                className="w-full p-2 border border-gray-300 rounded"
+                type="number"
+                name="room_number"
+                onChange={handleChangeRoom}
+                value={roomData.room_number}
+
+            />
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
+                onClick={handlecreateRoom}
+              >
+                Crear habitacion
+              </button>
+            </div>
+</form>
           </div>
         )}
 
@@ -192,4 +262,5 @@ export default function () {
     </div>
     </>
 )
+
 }
