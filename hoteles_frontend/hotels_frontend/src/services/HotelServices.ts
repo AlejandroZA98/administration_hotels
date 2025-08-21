@@ -1,6 +1,6 @@
 import axios from "axios";
 import {HotelAPIResponseSchema, HotelsAPIResponseSchema, RoomsAPIResponseSchema} from "../schemas/hotel-schemas";
-import type { Hotel } from "../types";
+import type { Hotel, Reservation } from "../types";
 
 export async function getHotels() {
     const url='http://127.0.0.1:8000/hotels/hotels-list/'
@@ -198,4 +198,29 @@ export async function getAllReservations(hotelId: string, status: string) {
   } catch (error: any) {
     return error.response.data;
   }
+}
+
+export async function acceptReservation(reservationId: Reservation['id']) {
+  console.log("Aceptando reservacion con ID:", reservationId);
+  const url=`http://127.0.0.1:8000/reservations/reservation/${reservationId}/`
+  try {
+    const response = await axios.patch(url, { status: "aproved" });
+    return response.data;
+  } catch (error: any) {
+    console.error("Error al aceptar la reservación:", error);
+    return false;
+  }
+  
+}
+export async function canceledReservation(reservationId: Reservation['id']) {
+  console.log("Aceptando reservacion con ID:", reservationId);
+  const url=`http://127.0.0.1:8000/reservations/reservation/${reservationId}/`
+  try {
+    const response = await axios.patch(url, { status: "canceled" });
+    return response.data;
+  } catch (error: any) {
+    console.error("Error al aceptar la reservación:", error);
+    return false;
+  }
+  
 }
