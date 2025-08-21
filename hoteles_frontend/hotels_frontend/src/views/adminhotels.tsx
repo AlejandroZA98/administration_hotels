@@ -48,7 +48,6 @@ export default function () {
 
 
     const handleChange=(e:ChangeEvent<HTMLInputElement>| ChangeEvent<HTMLSelectElement>)=>{
-   // console.log("cambiando datos", e.target.name, e.target.value);
     setHotelData({
             ...hotelData,
             [e.target.name]:e.target.value
@@ -290,16 +289,17 @@ export default function () {
 
 
             
-          <div className="flex grid-cols-1 md:grid-cols-2 lg:grid-cols gap-4 p-6">
-            {
-                reservations.map((reservation) => (
-                    <ReservationDetail
-                    key={reservation.client}
-                    reservation={reservation}
-                    ></ReservationDetail>
-                ))
-            }
-            </div>
+            <div className="grid  grid-cols-3 gap-6">
+              {
+                  reservations.map((reservation) => (
+                      <ReservationDetail
+                      key={reservation.id}
+                      reservation={reservation}
+                      ></ReservationDetail>
+                    
+                  ))
+              }
+              </div>
             {/* Inputs de servicios que ofrece el hotel */}
           </div>
         )}
